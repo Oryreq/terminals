@@ -44,7 +44,7 @@ class DashboardController extends AbstractDashboardController
 
 
         yield MenuItem::section('Карта');
-        #yield MenuItem::linkToCrud('Этажи', 'fa-solid fa-stairs', Floor::class);
+        yield MenuItem::linkToCrud('Этажи', 'fa-solid fa-stairs', Floor::class);
 
 
         yield MenuItem::section('Софт');
