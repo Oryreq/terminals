@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Floor;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -41,7 +42,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::section('Арендаторы');
-
+        yield MenuItem::linkToCrud('Категории', 'fa-solid fa-tag', Category::class);
 
         yield MenuItem::section('Карта');
         yield MenuItem::linkToCrud('Этажи', 'fa-solid fa-stairs', Floor::class);
