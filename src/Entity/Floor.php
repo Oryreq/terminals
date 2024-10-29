@@ -44,12 +44,15 @@ class Floor
     private ?string $floorNumber = null;
 
 
-    #[Vich\UploadableField(mapping: 'floors', fileNameProperty: 'image')]
-    private ?File $imageFile = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['floor:item', 'floor:collection'])]
     private ?string $image = null;
+
+
+    #[Vich\UploadableField(mapping: 'floors', fileNameProperty: 'image')]
+    private ?File $imageFile = null;
+
+
 
     public function getId(): ?int
     {
@@ -68,6 +71,16 @@ class Floor
         return $this;
     }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
+    }
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;
@@ -83,13 +96,8 @@ class Floor
         return $this;
     }
 
-    public function getImage(): ?string
+    public function __toString(): string
     {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): void
-    {
-        $this->image = $image;
+        return $this->floorNumber;
     }
 }

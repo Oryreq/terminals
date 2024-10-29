@@ -6,3 +6,23 @@ vich_uploader:
             uri_prefix: /images/floors
             upload_destination: '%kernel.project_dir%/public/images/floors'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        updates:
+            uri_prefix: /files/updates
+            upload_destination: '%kernel.project_dir%/public/files/updates'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        categories:
+            uri_prefix: /files/categories
+            upload_destination: '%kernel.project_dir%/public/files/categories'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        renters_logo:
+            uri_prefix: /images/renters/logo
+            upload_destination: '%kernel.project_dir%/public/images/renters/logo'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        renters_photo:
+            uri_prefix: /images/renters/photo
+            upload_destination: '%kernel.project_dir%/public/images/renters/photo'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

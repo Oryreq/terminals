@@ -54,6 +54,7 @@ class FloorCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield IntegerField::new('floorNumber', 'Этаж')
                     ->hideWhenUpdating();
-        yield VichImageField::new('imageFile', 'Изображение');
+        yield VichImageField::new('imageFile', 'Изображение')->onlyOnForms();
+        yield VichImageField::new('image', 'Изображение')->onlyOnIndex();
     }
 }
