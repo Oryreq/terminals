@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Category;
 use App\Entity\Floor;
 use App\Entity\Renter;
+use App\Entity\StandbyMode;
 use App\Entity\TerminalUpdate;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -48,6 +49,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Арендаторы', 'fa-solid fa-users', Renter::class);
 
         yield MenuItem::section('Карта');
+        yield MenuItem::linkToCrud('Режим ожидания', 'fa-solid fa-tv', StandbyMode::class);
         yield MenuItem::linkToCrud('Этажи', 'fa-solid fa-stairs', Floor::class);
 
 
