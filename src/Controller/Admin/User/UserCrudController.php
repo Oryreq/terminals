@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\User;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
