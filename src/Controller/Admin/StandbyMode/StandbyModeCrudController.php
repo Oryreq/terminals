@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\StandbyMode;
 
 use App\Controller\Admin\Field\VichFileField;
-use App\Entity\StandbyMode;
+use App\Entity\StandbyMode\StandbyMode;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;

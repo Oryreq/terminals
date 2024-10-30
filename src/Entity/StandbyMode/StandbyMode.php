@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\StandbyMode;
 
 use App\Entity\Traits\UpdatedAtTrait;
-use App\Repository\StandbyModeRepository;
+use App\Repository\StandbyMode\StandbyModeRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use DateTime;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
