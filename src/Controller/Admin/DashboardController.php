@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\Advertisement\Advertisement;
 use App\Entity\Category\Category;
-use App\Entity\Exception;
 use App\Entity\Floor\Floor;
 use App\Entity\Renter\Renter;
 use App\Entity\StandbyMode\StandbyMode;
@@ -62,7 +61,6 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Софт');
         yield MenuItem::linkToCrud('Обновления', 'fa-solid fa-list-ul', TerminalUpdate::class);
-        yield MenuItem::linkToCrud('Исключения', 'fa-solid fa-bug', Exception::class);
 
 
         yield MenuItem::section('Настройки');
