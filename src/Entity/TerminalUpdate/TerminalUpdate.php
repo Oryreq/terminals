@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\TerminalUpdate;
 
 
+use App\Entity\Terminal\Terminal;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\UpdatedAtTrait;
+use App\Repository\TerminalUpdate\TerminalUpdateRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Repository\TerminalUpdateRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
@@ -19,6 +23,11 @@ class TerminalUpdate
 {
     use CreatedAtTrait;
     use UpdatedAtTrait;
+
+    public array $TYPES = [
+        'Modified version' => 'Модифицированная версия',
+        'Stable version' => 'Стабильная версия',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,10 +44,22 @@ class TerminalUpdate
     private ?string $update = null;
 
     #[ORM\Column]
-    private ?string $version = null;
+    #[Assert\Type(type: 'numeric', message: 'Пожалуйста, введите номер.')]
+    private ?float $version = null;
 
     #[ORM\Column]
     private ?string $type = null;
+
+    /**
+     * @var Collection<int, Terminal>
+     */
+    #[ORM\OneToMany(targetEntity: Terminal::class, mappedBy: 'terminalUpdate')]
+    private Collection $terminals;
+
+    public function __construct()
+    {
+        $this->terminals = new ArrayCollection();
+    }
 
 
 
@@ -82,12 +103,12 @@ class TerminalUpdate
         $this->update = $update;
     }
 
-    public function getVersion(): ?string
+    public function getVersion(): ?float
     {
         return $this->version;
     }
 
-    public function setVersion(?string $version): void
+    public function setVersion(?float $version): void
     {
         $this->version = $version;
     }
@@ -100,5 +121,39 @@ class TerminalUpdate
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return Collection<int, Terminal>
+     */
+    public function getTerminals(): Collection
+    {
+        return $this->terminals;
+    }
+
+    public function addTerminal(Terminal $terminal): static
+    {
+        if (!$this->terminals->contains($terminal)) {
+            $this->terminals->add($terminal);
+            $terminal->setTerminalUpdate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTerminal(Terminal $terminal): static
+    {
+        if ($this->terminals->removeElement($terminal)) {
+            // set the owning side to null (unless already changed)
+            if ($terminal->getTerminalUpdate() === $this) {
+                $terminal->setTerminalUpdate(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string {
+        return $this->TYPES[$this->type] . ' - ' . $this->version;
     }
 }

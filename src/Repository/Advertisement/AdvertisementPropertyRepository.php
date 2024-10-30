@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Advertisement;
 
-use App\Entity\AdvertisementProperty;
+use App\Entity\Advertisement\Form\AdvertisementProperty;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

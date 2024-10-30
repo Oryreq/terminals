@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\TerminalUpdate;
 
 use App\Controller\Admin\Field\VichFileField;
-use App\Entity\TerminalUpdate;
+use App\Entity\TerminalUpdate\TerminalUpdate;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 
@@ -21,6 +23,25 @@ class TerminalUpdateCrudController extends AbstractCrudController
     {
         return TerminalUpdate::class;
     }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $updates = new ArrayCollection($entityManager->getRepository(TerminalUpdate::class)->findAll());
+
+
+        /** @var TerminalUpdate $entityInstance */
+        $filtered = $updates->filter(function (TerminalUpdate $update) use ($entityInstance) {
+            return $update->getVersion() >= $entityInstance->getVersion();
+        });
+
+        if ($filtered->isEmpty()) {
+            parent::persistEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Версию меньше или равную текущей - поставить нельзя.');
+    }
+
 
     public function configureActions(Actions $actions): Actions
     {
@@ -46,12 +67,13 @@ class TerminalUpdateCrudController extends AbstractCrudController
         yield TextField::new('description', 'Описание обновления');
 
         yield VichFileField::new('updateFile', 'Архив с обновлением')
+                        ->setRequired(true)
                         ->onlyOnForms();
 
         yield VichFileField::new('update', 'Обновление')
                         ->onlyOnIndex();
 
-        yield TextField::new('version', 'Версия');
+        yield NumberField::new('version', 'Версия');
 
         yield ChoiceField::new('type', 'Тип')->setChoices([
             'Модифицированная версия' => 'Modified version',

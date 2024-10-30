@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Advertisement;
 
+use App\Entity\Advertisement\Form\AdvertisementProperty;
 use App\Entity\Traits\UpdatedAtTrait;
-use App\Repository\AdvertisementRepository;
+use App\Repository\Advertisement\AdvertisementRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use DateTime;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
@@ -76,16 +77,6 @@ class Advertisement
         return $this;
     }
 
-    public function getDisplayOrder(): ?int
-    {
-        return $this->displayOrder;
-    }
-
-    public function setDisplayOrder(?int $displayOrder): void
-    {
-        $this->displayOrder = $displayOrder;
-    }
-
     public function getCanShow(): ?bool
     {
         return $this->canShow;
@@ -125,5 +116,16 @@ class Advertisement
 
         return $this;
     }
+
+    public function propertiesToString(): string
+    {
+        $result = '';
+        for ($i = 0; $i < $this->properties->count(); $i++) {
+            $result .= ($i + 1) . ') ' . $this->properties->get($i) . PHP_EOL;
+        }
+        return $result;
+    }
+
+
 
 }

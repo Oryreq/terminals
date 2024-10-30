@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Advertisement;
 
 use App\Controller\Admin\Field\VichFileField;
-use App\Entity\Advertisement;
-use App\Entity\AdvertisementProperty;
-use App\Form\Type\AdvertisementPropertiesForm;
+use App\Entity\Advertisement\Advertisement;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 
 
 class AdvertisementCrudController extends AbstractCrudController
@@ -77,10 +75,15 @@ class AdvertisementCrudController extends AbstractCrudController
 
         yield CollectionField::new('properties', 'Настройки')
             ->showEntryLabel(false)
+            ->onlyOnForms()
+            ->setColumns(9)
             ->useEntryCrudForm(AdvertisementPropertyCrudController::class);
 
+        yield TextEditorField::new('propertiesToString', 'Информация')
+                    #->renderAsHtml()
+                    #->set
+                    ->onlyOnIndex();
+
         yield BooleanField::new('canShow', 'Показывать');
-        yield DateTimeField::new('updatedAt', 'Обновлено')
-            ->onlyOnIndex();
     }
 }
