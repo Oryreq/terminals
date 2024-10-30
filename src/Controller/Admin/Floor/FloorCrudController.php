@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Floor;
 
 use App\Controller\Admin\Field\VichImageField;
-use App\Entity\Floor;
-use App\Repository\FloorRepository;
+use App\Entity\Floor\Floor;
+use App\Repository\Floor\FloorRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use Symfony\Contracts\Service\Attribute\Required;
 
 
@@ -54,7 +53,9 @@ class FloorCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield IntegerField::new('floorNumber', 'Этаж')
                     ->hideWhenUpdating();
-        yield VichImageField::new('imageFile', 'Изображение')->onlyOnForms();
+        yield VichImageField::new('imageFile', 'Изображение')
+                        ->setFormTypeOption('allow_delete', false)
+                        ->onlyOnForms();
         yield VichImageField::new('image', 'Изображение')->onlyOnIndex();
     }
 }
