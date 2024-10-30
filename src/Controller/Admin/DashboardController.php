@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Advertisement;
 use App\Entity\Category;
 use App\Entity\Floor;
 use App\Entity\Renter;
@@ -50,6 +51,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Карта');
         yield MenuItem::linkToCrud('Режим ожидания', 'fa-solid fa-tv', StandbyMode::class);
+        yield MenuItem::linkToCrud('Реклама', 'fa-solid fa-rectangle-ad', Advertisement::class);
         yield MenuItem::linkToCrud('Этажи', 'fa-solid fa-stairs', Floor::class);
 
 
