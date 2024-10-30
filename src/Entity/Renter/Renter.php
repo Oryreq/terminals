@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Renter;
 
+use App\Entity\Category\Category;
+use App\Entity\Floor\Floor;
+use App\Entity\Renter\Media\RenterImage;
 use App\Entity\Traits\UpdatedAtTrait;
-use App\Repository\RenterRepository;
+use App\Repository\Renter\RenterRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\Collection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use DateTime;
 
 
 #[ORM\HasLifecycleCallbacks]
@@ -39,20 +42,24 @@ class Renter
     #[ORM\Column(nullable: false)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(targetEntity: RenterImage::class, mappedBy: 'renter', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $images;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    ##[Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'])]
     private ?string $logo = null;
 
     #[Vich\UploadableField(mapping: 'renters_logo', fileNameProperty: 'logo')]
     private ?File $logoFile = null;
 
+    /**
+     * @var Collection<int, RenterImage>
+     */
+    #[ORM\OneToMany(targetEntity: RenterImage::class, mappedBy: 'renter', cascade: ['all'])]
+    private Collection $images;
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -120,7 +127,7 @@ class Renter
         return $this->logo;
     }
 
-    public function setLogo(string $logo): static
+    public function setLogo(?string $logo): static
     {
         $this->logo = $logo;
 
@@ -142,10 +149,20 @@ class Renter
         return $this;
     }
 
+
+    public function __toString(): string
+    {
+        return $this->name ?: '';
+    }
+
+    /**
+     * @return Collection<int, RenterImage>
+     */
     public function getImages(): Collection
     {
         return $this->images;
     }
+
     public function addImage(RenterImage $image): static
     {
         if (!$this->images->contains($image)) {
@@ -155,6 +172,7 @@ class Renter
 
         return $this;
     }
+
     public function removeImage(RenterImage $image): static
     {
         if ($this->images->removeElement($image)) {
@@ -165,10 +183,5 @@ class Renter
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name ?: '';
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Renter;
 
 use App\Controller\Admin\Field\VichImageField;
-use App\Entity\Renter;
-use App\Form\Type\VichImageForm;
+use App\Entity\Renter\Renter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -66,7 +65,12 @@ class RenterCrudController extends AbstractCrudController
             ->onlyOnIndex();
 
         yield CollectionField::new('images', 'Фотографии')
-            ->setEntryType(VichImageForm::class)->onlyOnForms();
+            ->onlyOnForms()
+            ->setColumns(9)
+            ->useEntryCrudForm(RenterImageCrudController::class);
+
+        #yield CollectionField::new('images', 'Фотографии')
+        #    ->setEntryType(VichImageForm::class)->onlyOnForms();
 
         yield DateTimeField::new('updatedAt', 'Обновлено')
             ->onlyOnIndex();

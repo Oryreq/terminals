@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Category;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Renter\Renter;
 use App\Entity\Traits\UpdatedAtTrait;
-use App\Repository\CategoryRepository;
+use App\Repository\Category\CategoryRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use DateTime;
 
 
 #[ORM\HasLifecycleCallbacks]
