@@ -41,6 +41,17 @@ class TerminalUpdateCrudController extends AbstractCrudController
         $this->addFlash('warning', 'Версию меньше или равную текущей - поставить нельзя.');
     }
 
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var TerminalUpdate $entityInstance */
+        if ($entityInstance->getTerminals()->isEmpty()) {
+            parent::deleteEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $this->addFlash('warning', 'Нельзя удалить данное обновление, так как к нему привязаны терминалы.');
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions

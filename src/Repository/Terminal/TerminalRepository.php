@@ -17,6 +17,8 @@ class TerminalRepository extends ServiceEntityRepository
         parent::__construct($registry, Terminal::class);
     }
 
+
+
     //    /**
     //     * @return Terminal[] Returns an array of Terminal objects
     //     */
