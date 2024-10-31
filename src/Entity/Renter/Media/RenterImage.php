@@ -32,6 +32,7 @@ class RenterImage
     #[Vich\UploadableField(mapping: 'renters_photo', fileNameProperty: 'image')]
     private ?File $imageFile = null;
 
+
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Renter $renter = null;
 
@@ -41,7 +42,6 @@ class RenterImage
     {
         return $this->id;
     }
-
 
     public function setImageFile(?File $imageFile): self
     {
@@ -53,16 +53,17 @@ class RenterImage
 
         return $this;
     }
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
 
-
     public function getImage(): ?string
     {
         return $this->image;
     }
+
     public function setImage(?string $image): static
     {
         $this->image = $image;

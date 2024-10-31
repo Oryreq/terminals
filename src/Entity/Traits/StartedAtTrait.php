@@ -7,12 +7,12 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 
 
 #[ORM\HasLifecycleCallbacks]
-
 trait StartedAtTrait
 {
     #[ORM\Column(type: 'datetime', nullable: false)]
     #[Ignore]
     protected \DateTime $startedAt;
+
 
     public function getStartedAt(): \DateTime
     {

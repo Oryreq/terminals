@@ -16,19 +16,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'Администратор' => 'ROLE_ADMIN',
     ];
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 180)]
     private ?string $username = null;
+
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
     private array $roles = [];
+
 
     /**
      * @var string The hashed password
@@ -38,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     private ?string $plainPassword = null;
+
 
 
     public function getId(): ?int
@@ -116,8 +121,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = $plainPassword;
         return $this;
     }
-
-
 
     /**
      * @see UserInterface

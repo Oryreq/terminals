@@ -32,6 +32,7 @@ class Floor
     use CreatedAtTrait;
     use UpdatedAtTrait;
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

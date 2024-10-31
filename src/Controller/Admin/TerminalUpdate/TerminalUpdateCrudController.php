@@ -28,7 +28,6 @@ class TerminalUpdateCrudController extends AbstractCrudController
     {
         $updates = new ArrayCollection($entityManager->getRepository(TerminalUpdate::class)->findAll());
 
-
         /** @var TerminalUpdate $entityInstance */
         $filtered = $updates->filter(function (TerminalUpdate $update) use ($entityInstance) {
             return $update->getVersion() >= $entityInstance->getVersion();
@@ -42,44 +41,47 @@ class TerminalUpdateCrudController extends AbstractCrudController
         $this->addFlash('warning', 'Версию меньше или равную текущей - поставить нельзя.');
     }
 
-
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
-            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setLabel('Создать обновление');
-            });
+                    ->remove(Crud::PAGE_INDEX, Action::EDIT)
+                    ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                        return $action->setLabel('Создать обновление');
+                    });
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Обновление')
-            ->setEntityLabelInPlural('Обновления')
-            ->setPageTitle('new', 'Добавить новое обновление')
-            ->showEntityActionsInlined();
+                 ->setEntityLabelInSingular('Обновление')
+                 ->setEntityLabelInPlural('Обновления')
+                 ->setPageTitle('new', 'Добавить новое обновление')
+                 ->showEntityActionsInlined();
     }
 
     public function configureFields(string $pageName): iterable
     {
-        yield IdField::new('id')->hideOnForm();
+        yield IdField::new('id')
+                     ->onlyOnIndex();
+
         yield TextField::new('description', 'Описание обновления');
 
         yield VichFileField::new('updateFile', 'Архив с обновлением')
-                        ->setRequired(true)
-                        ->onlyOnForms();
+                     ->setRequired(true)
+                     ->onlyOnForms();
 
         yield VichFileField::new('update', 'Обновление')
-                        ->onlyOnIndex();
+                     ->onlyOnIndex();
 
         yield NumberField::new('version', 'Версия');
 
-        yield ChoiceField::new('type', 'Тип')->setChoices([
-            'Модифицированная версия' => 'Modified version',
-            'Стабильная версия' => 'Stable version',
-        ]);
+        yield ChoiceField::new('type', 'Тип')
+                     ->setChoices([
+                         'Модифицированная версия' => 'Modified version',
+                         'Стабильная версия' => 'Stable version',
+                     ]);
 
-        yield DateTimeField::new('createdAt', 'Создана')->hideOnForm();
+        yield DateTimeField::new('createdAt', 'Создана')
+                     ->onlyOnIndex();
     }
 }

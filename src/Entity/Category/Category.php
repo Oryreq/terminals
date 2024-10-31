@@ -25,26 +25,33 @@ class Category
 {
     use UpdatedAtTrait;
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
 
     #[ORM\Column(name: 'image_name')]
     private ?string $image = null;
 
+
     #[Vich\UploadableField(mapping: 'categories', fileNameProperty: 'image')]
     #[Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'])]
     private ?File $imageFile = null;
+
 
     /**
      * @var Collection<int, Renter>
      */
     #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'category')]
     private Collection $renters;
+
+
 
     public function __construct()
     {

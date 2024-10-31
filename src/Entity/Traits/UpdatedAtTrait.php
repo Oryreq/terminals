@@ -15,6 +15,7 @@ trait UpdatedAtTrait
     #[Ignore]
     protected $updatedAt;
 
+
     public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;

@@ -20,6 +20,7 @@ class UserCrudController extends AbstractCrudController
     #[Required]
     public UserPasswordHasherInterface  $passwordEncoder;
 
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -28,18 +29,18 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setLabel('Создать пользователя');
-            });
+                    ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                        return $action->setLabel('Создать пользователя');
+                    });
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Пользователь')
-            ->setEntityLabelInPlural('Пользователи')
-            ->setPageTitle('edit', 'Изменение пользователя')
-            ->setPageTitle('new', 'Добавление пользователя');
+                 ->setEntityLabelInSingular('Пользователь')
+                 ->setEntityLabelInPlural('Пользователи')
+                 ->setPageTitle('edit', 'Изменение пользователя')
+                 ->setPageTitle('new', 'Добавление пользователя');
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -64,18 +65,21 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield IdField::new('id')->hideOnForm();
+        yield IdField::new('id')
+                     ->onlyOnIndex();
+
         yield TextField::new('username', 'Логин');
+
         yield TextField::new('plainPassword', 'Пароль')
-                        ->onlyWhenCreating();
+                     ->onlyWhenCreating();
+
         yield TextField::new('plainPassword', 'Новый пароль')
-                        ->onlyWhenUpdating();
+                     ->onlyWhenUpdating();
 
         yield ChoiceField::new('roles', 'Права')
-            ->setRequired(true)
-            ->allowMultipleChoices()
-            ->renderExpanded()
-            ->setChoices(User::ROLES);
+                     ->setRequired(true)
+                     ->allowMultipleChoices()
+                     ->renderExpanded()
+                     ->setChoices(User::ROLES);
     }
-
 }

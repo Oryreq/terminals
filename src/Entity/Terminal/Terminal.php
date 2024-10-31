@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: TerminalRepository::class)]
 class Terminal
 {
@@ -17,17 +18,22 @@ class Terminal
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
 
     #[ORM\Column]
     private ?int $sleepDelay = null;
 
+
     #[ORM\Column]
     private ?int $changingAdvertisementTime = null;
 
+
     #[ORM\ManyToOne(inversedBy: 'terminals')]
     private ?TerminalUpdate $terminalUpdate = null;
+
 
     /**
      * @var Collection<int, AdvertisementProperty>
@@ -35,11 +41,12 @@ class Terminal
     #[ORM\ManyToMany(targetEntity: AdvertisementProperty::class, mappedBy: 'terminals')]
     private Collection $advertisementProperties;
 
+
+
     public function __construct()
     {
         $this->advertisementProperties = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {

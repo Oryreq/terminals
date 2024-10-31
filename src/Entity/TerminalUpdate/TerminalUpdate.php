@@ -2,7 +2,6 @@
 
 namespace App\Entity\TerminalUpdate;
 
-
 use App\Entity\Terminal\Terminal;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\UpdatedAtTrait;
@@ -24,31 +23,39 @@ class TerminalUpdate
     use CreatedAtTrait;
     use UpdatedAtTrait;
 
+
     public array $TYPES = [
         'Modified version' => 'Модифицированная версия',
         'Stable version' => 'Стабильная версия',
     ];
+
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(nullable: true)]
     private ?string $description = null;
+
 
     #[Vich\UploadableField(mapping: 'updates', fileNameProperty: 'update')]
     private ?File $updateFile = null;
 
+
     #[ORM\Column(name: 'update_name')]
     private ?string $update = null;
+
 
     #[ORM\Column]
     #[Assert\Type(type: 'numeric', message: 'Пожалуйста, введите номер.')]
     private ?float $version = null;
 
+
     #[ORM\Column]
     private ?string $type = null;
+
 
     /**
      * @var Collection<int, Terminal>
@@ -56,12 +63,12 @@ class TerminalUpdate
     #[ORM\OneToMany(targetEntity: Terminal::class, mappedBy: 'terminalUpdate')]
     private Collection $terminals;
 
+
+
     public function __construct()
     {
         $this->terminals = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {

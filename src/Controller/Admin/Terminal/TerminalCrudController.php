@@ -25,17 +25,17 @@ class TerminalCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setLabel('Создать терминал');
-            });
+                    ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                        return $action->setLabel('Создать терминал');
+                    });
     }
 
     public function configureCrud(Crud $crud): Crud
     {   return $crud
-        ->setEntityLabelInSingular('Терминал')
-        ->setEntityLabelInPlural('Терминалы')
-        ->setPageTitle('new', 'Добавление терминала')
-        ->setPageTitle('edit', 'Изменение терминала');
+                 ->setEntityLabelInSingular('Терминал')
+                 ->setEntityLabelInPlural('Терминалы')
+                 ->setPageTitle('new', 'Добавление терминала')
+                 ->setPageTitle('edit', 'Изменение терминала');
     }
 
     public function createEntity(string $entityFqcn): Terminal
@@ -48,21 +48,25 @@ class TerminalCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')
-            ->onlyOnIndex();
+                     ->onlyOnIndex();
 
         yield FormField::addColumn(11);
-        yield TextField::new('name', 'Название')->setColumns(5);
+        yield TextField::new('name', 'Название')
+                     ->setColumns(5);
+
         yield IntegerField::new('sleepDelay', 'Задержка перехода в режим ожидания')
-                            ->setValue(1)
-                            ->setHelp('В секундах')
-                            ->setColumns(5);
+                     ->setValue(1)
+                     ->setHelp('В секундах')
+                     ->setColumns(5);
+
         yield IntegerField::new('changingAdvertisementTime', 'Время смены рекламы')
-                            ->setHelp('В секундах')
-                            ->setColumns(5);
+                     ->setHelp('В секундах')
+                     ->setColumns(5);
 
         yield AssociationField::new('terminalUpdate', 'Обновление')
-            ->setColumns(5);
+                     ->setColumns(5);
 
-        yield TextEditorField::new('advertisementsToString', 'Реклама')->onlyOnIndex();
+        yield TextEditorField::new('advertisementsToString', 'Реклама')
+                     ->onlyOnIndex();
     }
 }

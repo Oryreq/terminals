@@ -13,6 +13,7 @@ trait EndedAtTrait
     #[Ignore]
     protected \DateTime $endedAt;
 
+
     public function getEndedAt(): \DateTime
     {
         return $this->endedAt;

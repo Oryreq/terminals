@@ -17,9 +17,10 @@ use Symfony\Contracts\Service\Attribute\Required;
 class FloorCrudController extends AbstractCrudController
 {
     #[Required]
-    public FloorRepository $floorRepository;
+    public FloorRepository $repository;
 
     private int $maxFloorNumber = 4;
+
 
     public static function getEntityFqcn(): string
     {
@@ -28,7 +29,7 @@ class FloorCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $floorsCount = count($this->floorRepository->findAll());
+        $floorsCount = count($this->repository->findAll());
         if ($floorsCount >= $this->maxFloorNumber) {
             return $actions->remove(Crud::PAGE_INDEX, Action::NEW);
         }
@@ -42,20 +43,25 @@ class FloorCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-                    ->setEntityLabelInSingular('Этаж')
-                    ->setEntityLabelInPlural('Этажи')
-                    ->setPageTitle('edit', 'Изменение этажа')
-                    ->setPageTitle('new', 'Добавление этажа');
+                 ->setEntityLabelInSingular('Этаж')
+                 ->setEntityLabelInPlural('Этажи')
+                 ->setPageTitle('edit', 'Изменение этажа')
+                 ->setPageTitle('new', 'Добавление этажа');
     }
 
     public function configureFields(string $pageName): iterable
     {
-        yield IdField::new('id')->hideOnForm();
+        yield IdField::new('id')
+                     ->onlyOnIndex();
+
         yield IntegerField::new('floorNumber', 'Этаж')
-                    ->hideWhenUpdating();
+                     ->hideWhenUpdating();
+
         yield VichImageField::new('imageFile', 'Изображение')
-                        ->setFormTypeOption('allow_delete', false)
-                        ->onlyOnForms();
-        yield VichImageField::new('image', 'Изображение')->onlyOnIndex();
+                     ->setFormTypeOption('allow_delete', false)
+                     ->onlyOnForms();
+
+        yield VichImageField::new('image', 'Изображение')
+                     ->onlyOnIndex();
     }
 }

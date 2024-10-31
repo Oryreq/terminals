@@ -6,6 +6,7 @@ use App\Entity\TerminalUpdate\TerminalUpdate;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 class TerminalUpdateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

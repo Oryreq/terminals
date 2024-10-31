@@ -6,6 +6,7 @@ use App\Entity\Terminal\Terminal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Terminal>
  */

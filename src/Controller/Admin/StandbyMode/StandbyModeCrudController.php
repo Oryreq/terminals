@@ -20,63 +20,64 @@ class StandbyModeCrudController extends AbstractCrudController
         return StandbyMode::class;
     }
 
-
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
-                return $action->setLabel('Создать файл');
-            });
+                    ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                        return $action->setLabel('Создать файл');
+                    });
     }
 
     public function configureCrud(Crud $crud): Crud
     {   return $crud
-        ->setEntityLabelInSingular('Режим ожидания')
-        ->setEntityLabelInPlural('Режим ожидания')
-        ->setPageTitle('new', 'Добавление файла')
-        ->setPageTitle('edit', 'Изменение файла');
+                 ->setEntityLabelInSingular('Режим ожидания')
+                 ->setEntityLabelInPlural('Режим ожидания')
+                 ->setPageTitle('new', 'Добавление файла')
+                 ->setPageTitle('edit', 'Изменение файла');
     }
-
 
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')
-            ->onlyOnIndex();
+                     ->onlyOnIndex();
 
-        yield VichFileField::new('modeFile', 'Файл')
-            ->setFormTypeOption('allow_delete', false)
-            ->setRequired(true)
-            ->setHelp('
-                <div class="mt-3">
-                    <span class="badge badge-info">*.mp4</span>
-                    <span class="badge badge-info">*.wmv</span>
-                    <span class="badge badge-info">*.avi</span>
-                    <span class="badge badge-info">*.jpg</span>
-                    <span class="badge badge-info">*.jpeg</span>
-                    <span class="badge badge-info">*.png</span>
-                </div>
-            ')
-            ->onlyOnForms();
 
-        yield VichFileField::new('modeFile', 'Файл')
-            ->setFormTypeOption('allow_delete', false)
-            ->setHelp('
-                <div class="mt-3">
-                    <span class="badge badge-info">*.mp4</span>
-                    <span class="badge badge-info">*.wmv</span>
-                    <span class="badge badge-info">*.avi</span>
-                    <span class="badge badge-info">*.jpg</span>
-                    <span class="badge badge-info">*.jpeg</span>
-                    <span class="badge badge-info">*.png</span>
-                </div>
-            ')
-            ->onlyWhenUpdating();
+        $advertisementFileField =
+            VichFileField::new('modeFile', 'Файл')
+                     ->setFormTypeOption('allow_delete', false)
+                     ->setHelp('
+                         <div class="mt-3">
+                             <span class="badge badge-info">*.mp4</span>
+                             <span class="badge badge-info">*.wmv</span>
+                             <span class="badge badge-info">*.avi</span>
+                             <span class="badge badge-info">*.jpg</span>
+                             <span class="badge badge-info">*.jpeg</span>
+                             <span class="badge badge-info">*.png</span>
+                        </div>
+                     ')
+                     ->onlyOnForms();
+
+        $action = $this->getContext()->getCrud()->getCurrentAction();
+
+        if ($action == Action::NEW) {
+            yield $advertisementFileField
+                     ->setRequired(true)
+                     ->onlyWhenCreating();
+        } else if ($action == Action::EDIT) {
+            yield $advertisementFileField
+                     ->setRequired(false)
+                     ->onlyWhenUpdating();
+        }
+
 
         yield VichFileField::new('mode', 'Файл')
-                ->onlyOnIndex();
+                     ->onlyOnIndex();
+
 
         yield BooleanField::new('isVisible', 'Виден ли файл');
+
+
         yield DateTimeField::new('updatedAt', 'Обновлено')
-            ->onlyOnIndex();
+                     ->onlyOnIndex();
     }
 }

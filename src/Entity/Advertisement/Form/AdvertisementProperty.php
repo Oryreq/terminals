@@ -36,11 +36,12 @@ class AdvertisementProperty
     #[ORM\ManyToMany(targetEntity: Terminal::class, inversedBy: 'advertisementProperties')]
     private Collection $terminals;
 
+
+
     public function __construct()
     {
         $this->terminals = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {

@@ -20,19 +20,24 @@ class Advertisement
 {
     use UpdatedAtTrait;
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $advertisement = null;
+
 
     #[Vich\UploadableField(mapping: 'advertisement', fileNameProperty: 'advertisement')]
     private ?File $advertisementFile = null;
 
+
     #[ORM\Column]
     private ?bool $canShow = null;
+
 
     /**
      * @var Collection<int, AdvertisementProperty>

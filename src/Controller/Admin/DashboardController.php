@@ -41,8 +41,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Админ-панель')
-            ->setDefaultColorScheme('dark');
+                        ->setTitle('Админ-панель')
+                        ->setDefaultColorScheme('dark');
     }
 
     public function configureMenuItems(): iterable

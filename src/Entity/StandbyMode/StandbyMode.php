@@ -17,16 +17,20 @@ class StandbyMode
 {
     use UpdatedAtTrait;
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $mode = null;
 
+
     #[Vich\UploadableField(mapping: 'standby_mode', fileNameProperty: 'mode')]
     private ?File $modeFile = null;
+
 
     #[ORM\Column]
     private ?bool $isVisible = null;
