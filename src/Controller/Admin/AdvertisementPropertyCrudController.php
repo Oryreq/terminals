@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin\Advertisement;
+namespace App\Controller\Admin;
 
 use App\Entity\Advertisement\Form\AdvertisementProperty;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;

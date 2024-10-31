@@ -2,6 +2,9 @@
 
 namespace App\Entity\Advertisement;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Advertisement\Form\AdvertisementProperty;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\Advertisement\AdvertisementRepository;
@@ -16,6 +19,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: AdvertisementRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'advertisement:item']),
+        new GetCollection(normalizationContext: ['groups' => 'advertisement:item']),
+    ],
+    paginationEnabled: false,
+)]
 class Advertisement
 {
     use UpdatedAtTrait;

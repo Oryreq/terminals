@@ -5,6 +5,9 @@ namespace App\Entity\Renter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use App\Controller\Api\RenterController;
 use App\Entity\Category\Category;
 use App\Entity\Floor\Floor;
 use App\Entity\Renter\Media\RenterImage;
@@ -24,9 +27,27 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext: ['groups' => 'renter:item']),
-        new GetCollection(normalizationContext: ['groups' => 'renter:collection']),
+        new GetCollection(
+            uriTemplate: '/renters/search',
+            controller: RenterController::class,
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'word',
+                        in: 'query',
+                        required: false,
+                        schema: [
+                            'type' => 'string',
+                        ]
+                    )
+                ]
+            )
+        ),
+        new Get(),
+        new GetCollection(),
+
     ],
+    normalizationContext: ['groups' => ['renter:item']],
     paginationEnabled: false,
 )]
 class Renter
@@ -36,31 +57,30 @@ class Renter
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'renters')]
     private ?Floor $floor = null;
 
     #[ORM\ManyToOne(inversedBy: 'renters')]
-    #[Groups(['renter:item', 'renter:collection'])]
     private ?Category $category = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(nullable: false)]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     ##[Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'])]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $logo = null;
 
     #[Vich\UploadableField(mapping: 'renters_logo', fileNameProperty: 'logo')]
@@ -70,7 +90,7 @@ class Renter
      * @var Collection<int, RenterImage>
      */
     #[ORM\OneToMany(targetEntity: RenterImage::class, mappedBy: 'renter', cascade: ['all'])]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private Collection $images;
 
     public function __construct()
@@ -108,7 +128,7 @@ class Renter
         return $this;
     }
 
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     public function getFloorNumber(): ?int
     {
         return $this->floor->getFloorNumber();
@@ -124,6 +144,12 @@ class Renter
         $this->category = $category;
 
         return $this;
+    }
+
+    #[Groups(['renter:item', 'category:item'])]
+    public function getCategoryName(): ?string
+    {
+        return $this->category->getName();
     }
 
     public function getPhoneNumber(): ?string

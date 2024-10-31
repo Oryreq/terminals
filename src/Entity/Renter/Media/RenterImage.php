@@ -23,12 +23,12 @@ class RenterImage
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?int $id = null;
 
 
     #[ORM\Column]
-    #[Groups(['renter:item', 'renter:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $image = null;
 
 

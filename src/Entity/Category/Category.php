@@ -26,7 +26,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'category:item']),
-        new GetCollection(normalizationContext: ['groups' => 'category:collection']),
+        new GetCollection(normalizationContext: ['groups' => 'category:item']),
     ],
     paginationEnabled: false,
 )]
@@ -38,17 +38,17 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['category:item', 'category:collection'])]
+    #[Groups(['category:item'])]
     private ?int $id = null;
 
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:item', 'category:collection'])]
+    #[Groups(['renter:item', 'category:item'])]
     private ?string $name = null;
 
 
     #[ORM\Column(name: 'image_name')]
-    #[Groups(['category:item', 'category:collection'])]
+    #[Groups(['category:item', 'renter:item'])]
     private ?string $image = null;
 
 
@@ -61,7 +61,7 @@ class Category
      * @var Collection<int, Renter>
      */
     #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'category', cascade: ['all'])]
-    #[Groups(['category:item', 'category:collection'])]
+    #[Groups(['category:item'])]
     private Collection $renters;
 
 

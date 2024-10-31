@@ -66,7 +66,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Настройки');
         yield MenuItem::linkToCrud('Пользователи', 'fa-solid fa-user-gear', User::class);
-        yield MenuItem::linkToUrl('API', 'fa fa-link', 'api')
+        yield MenuItem::linkToUrl('Api', 'fa fa-link', 'api')
                         ->setLinkTarget('_blank');
     }
 }

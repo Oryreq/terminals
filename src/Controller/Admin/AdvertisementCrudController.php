@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin\Advertisement;
+namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\VichFileField;
 use App\Entity\Advertisement\Advertisement;
