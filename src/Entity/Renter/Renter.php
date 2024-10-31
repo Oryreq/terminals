@@ -43,7 +43,7 @@ class Renter
     #[Groups(['renter:item', 'renter:collection'])]
     private ?string $name = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'renters')]
     private ?Floor $floor = null;
 
     #[ORM\ManyToOne(inversedBy: 'renters')]

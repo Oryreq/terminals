@@ -5,10 +5,13 @@ namespace App\Entity\Floor;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Entity\Renter\Renter;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\Floor\FloorRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -54,6 +57,18 @@ class Floor
     private ?File $imageFile = null;
 
 
+    /**
+     * @var Collection<int, Renter>
+     */
+    #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'floor', cascade: ['all'])]
+    private Collection $renters;
+
+
+
+    public function __construct()
+    {
+        $this->renters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,6 +107,36 @@ class Floor
         $this->imageFile = $imageFile;
         if (null !== $imageFile) {
             $this->updatedAt = new DateTime();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Renter>
+     */
+    public function getRenters(): Collection
+    {
+        return $this->renters;
+    }
+
+    public function addRenter(Renter $renter): static
+    {
+        if (!$this->renters->contains($renter)) {
+            $this->renters->add($renter);
+            $renter->setFloor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRenter(Renter $renter): static
+    {
+        if ($this->renters->removeElement($renter)) {
+            // set the owning side to null (unless already changed)
+            if ($renter->getFloor() === $this) {
+                $renter->setFloor(null);
+            }
         }
 
         return $this;

@@ -22,10 +22,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[Vich\Uploadable]
-#[ApiResource]
 #[UniqueEntity('name')]
 #[ApiResource(
-    shortName: 'Categories',
     operations: [
         new Get(normalizationContext: ['groups' => 'category:item']),
         new GetCollection(normalizationContext: ['groups' => 'category:collection']),
@@ -62,7 +60,7 @@ class Category
     /**
      * @var Collection<int, Renter>
      */
-    #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'category', cascade: ['all'])]
     #[Groups(['category:item', 'category:collection'])]
     private Collection $renters;
 

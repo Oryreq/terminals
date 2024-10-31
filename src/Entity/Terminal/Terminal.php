@@ -150,9 +150,12 @@ class Terminal
         return $this;
     }
 
-    public function advertisementsToString(): string
+    public function advertisementsToString(): ?string
     {
         $result = '';
+        if ($this->advertisementProperties->count() === 0) {
+            return null;
+        }
         for ($i = 0; $i < $this->advertisementProperties->count(); $i++) {
             $result .= $this->advertisementProperties->get($i) . PHP_EOL;
         }

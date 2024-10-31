@@ -135,6 +135,9 @@ class TerminalCrudController extends AbstractCrudController
         yield AssociationField::new('terminalUpdate', 'Обновление')
                      ->setColumns(5);
 
+        $test = TextEditorField::new('advertisementsToString', 'Реклама')
+                               ->getAsDto();
+
         yield TextEditorField::new('advertisementsToString', 'Реклама')
                      ->onlyOnIndex();
     }
