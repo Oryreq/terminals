@@ -2,6 +2,9 @@
 
 namespace App\Entity\Renter;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Category\Category;
 use App\Entity\Floor\Floor;
 use App\Entity\Renter\Media\RenterImage;
@@ -12,12 +15,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RenterRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'renter:item']),
+        new GetCollection(normalizationContext: ['groups' => 'renter:collection']),
+    ],
+    paginationEnabled: false,
+)]
 class Renter
 {
     use UpdatedAtTrait;
@@ -25,25 +36,31 @@ class Renter
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne]
     private ?Floor $floor = null;
 
     #[ORM\ManyToOne(inversedBy: 'renters')]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?Category $category = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(nullable: false)]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     ##[Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'])]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?string $logo = null;
 
     #[Vich\UploadableField(mapping: 'renters_logo', fileNameProperty: 'logo')]
@@ -53,6 +70,7 @@ class Renter
      * @var Collection<int, RenterImage>
      */
     #[ORM\OneToMany(targetEntity: RenterImage::class, mappedBy: 'renter', cascade: ['all'])]
+    #[Groups(['renter:item', 'renter:collection'])]
     private Collection $images;
 
     public function __construct()
@@ -88,6 +106,12 @@ class Renter
         $this->floor = $floor;
 
         return $this;
+    }
+
+    #[Groups(['renter:item', 'renter:collection'])]
+    public function getFloorNumber(): ?int
+    {
+        return $this->floor->getFloorNumber();
     }
 
     public function getCategory(): ?Category

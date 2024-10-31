@@ -41,8 +41,8 @@ class Floor
 
 
     #[ORM\Column(unique: true)]
-    #[Groups(['floor:item', 'floor:collection'])]
-    private ?string $floorNumber = null;
+    #[Groups(['floor:item', 'floor:collection', 'category:item', 'category:collection'])]
+    private ?int $floorNumber = null;
 
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -60,12 +60,12 @@ class Floor
         return $this->id;
     }
 
-    public function getFloorNumber(): ?string
+    public function getFloorNumber(): ?int
     {
         return $this->floorNumber;
     }
 
-    public function setFloorNumber(string $floorNumber): static
+    public function setFloorNumber(?int $floorNumber): static
     {
         $this->floorNumber = $floorNumber;
 

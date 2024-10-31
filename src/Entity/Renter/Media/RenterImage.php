@@ -8,6 +8,7 @@ use App\Repository\Renter\RenterImageRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
@@ -22,10 +23,12 @@ class RenterImage
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?int $id = null;
 
 
     #[ORM\Column]
+    #[Groups(['renter:item', 'renter:collection'])]
     private ?string $image = null;
 
 

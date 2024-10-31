@@ -3,6 +3,8 @@
 namespace App\Entity\Category;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Renter\Renter;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\Category\CategoryRepository;
@@ -12,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -21,6 +24,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ApiResource]
 #[UniqueEntity('name')]
+#[ApiResource(
+    shortName: 'Categories',
+    operations: [
+        new Get(normalizationContext: ['groups' => 'category:item']),
+        new GetCollection(normalizationContext: ['groups' => 'category:collection']),
+    ],
+    paginationEnabled: false,
+)]
 class Category
 {
     use UpdatedAtTrait;
@@ -29,14 +40,17 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['category:item', 'category:collection'])]
     private ?int $id = null;
 
 
     #[ORM\Column(length: 255)]
+    #[Groups(['category:item', 'category:collection'])]
     private ?string $name = null;
 
 
     #[ORM\Column(name: 'image_name')]
+    #[Groups(['category:item', 'category:collection'])]
     private ?string $image = null;
 
 
@@ -49,6 +63,7 @@ class Category
      * @var Collection<int, Renter>
      */
     #[ORM\OneToMany(targetEntity: Renter::class, mappedBy: 'category')]
+    #[Groups(['category:item', 'category:collection'])]
     private Collection $renters;
 
 

@@ -2,6 +2,9 @@
 
 namespace App\Entity\TerminalUpdate;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Terminal\Terminal;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\UpdatedAtTrait;
@@ -11,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -18,6 +22,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: TerminalUpdateRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    shortName: 'Update',
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => 'update:collection']),
+    ],
+    paginationEnabled: false,
+)]
 class TerminalUpdate
 {
     use CreatedAtTrait;
@@ -33,10 +44,12 @@ class TerminalUpdate
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['update:collection', 'terminal:item', 'terminal:collection'])]
     private ?int $id = null;
 
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['update:collection'])]
     private ?string $description = null;
 
 
@@ -45,15 +58,18 @@ class TerminalUpdate
 
 
     #[ORM\Column(name: 'update_name')]
+    #[Groups(['update:collection', 'terminal:item', 'terminal:collection'])]
     private ?string $update = null;
 
 
     #[ORM\Column]
     #[Assert\Type(type: 'numeric', message: 'Пожалуйста, введите номер.')]
+    #[Groups(['update:collection', 'terminal:item', 'terminal:collection'])]
     private ?float $version = null;
 
 
     #[ORM\Column]
+    #[Groups(['update:collection', 'terminal:item', 'terminal:collection'])]
     private ?string $type = null;
 
 

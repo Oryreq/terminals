@@ -2,17 +2,29 @@
 
 namespace App\Entity\StandbyMode;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\StandbyMode\StandbyModeRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: StandbyModeRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    shortName: 'StandBy',
+    operations: [
+        new Get(normalizationContext: ['groups' => 'standBy:item']),
+        new GetCollection(normalizationContext: ['groups' => 'standBy:collection']),
+    ],
+    paginationEnabled: false,
+)]
 class StandbyMode
 {
     use UpdatedAtTrait;
@@ -21,10 +33,12 @@ class StandbyMode
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['standBy:item', 'standBy:collection'])]
     private ?int $id = null;
 
 
     #[ORM\Column(length: 255)]
+    #[Groups(['standBy:item', 'standBy:collection'])]
     private ?string $mode = null;
 
 
@@ -33,6 +47,7 @@ class StandbyMode
 
 
     #[ORM\Column]
+    #[Groups(['standBy:item', 'standBy:collection'])]
     private ?bool $isVisible = null;
 
 
