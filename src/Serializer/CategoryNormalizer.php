@@ -3,7 +3,6 @@
 namespace App\Serializer;
 
 use App\Entity\Category\Category;
-use App\Entity\StandbyMode\StandbyMode;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -19,7 +18,7 @@ readonly class CategoryNormalizer implements NormalizerInterface
 
     public function normalize($object, string $format = null, array $context = []): array
     {
-        /* @var StandbyMode $object */
+        /* @var Category $object */
         $data = $this->normalizer->normalize($object, $format, $context);
 
         $data['image'] = $this->storage->resolveUri($object, 'imageFile');
