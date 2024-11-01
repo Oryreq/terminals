@@ -4,27 +4,27 @@ namespace App\Entity\Advertisement\Form;
 
 use App\Entity\Advertisement\Advertisement;
 use App\Entity\Terminal\Terminal;
-use App\Entity\Traits\EndedAtTrait;
-use App\Entity\Traits\StartedAtTrait;
 use App\Repository\Advertisement\AdvertisementPropertyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Vich\UploaderBundle\Mapping\Annotation\Uploadable;
 
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: AdvertisementPropertyRepository::class)]
+#[Uploadable]
 class AdvertisementProperty
 {
-    use StartedAtTrait;
-    use EndedAtTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['advertisement:item'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['advertisement:item'])]
     private ?int $displayOrder = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
@@ -36,6 +36,15 @@ class AdvertisementProperty
     #[ORM\ManyToMany(targetEntity: Terminal::class, inversedBy: 'advertisementProperties')]
     private Collection $terminals;
 
+
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[Groups(['advertisement:item'])]
+    private \DateTime $startAt;
+
+
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[Groups(['advertisement:item'])]
+    private \DateTime $endAt;
 
 
     public function __construct()
@@ -72,11 +81,16 @@ class AdvertisementProperty
         return $this;
     }
 
+    #[Groups(['advertisement:item'])]
+    public function getAdvertisementImage(): ?string
+    {
+        return $this->advertisement->getAdvertisement();
+    }
 
     public function __toString(): string
     {
-        return 'Дата начала - '. $this->getStartedAt()->format('d-m-Y, H:i') . PHP_EOL .
-               'Дата конца - ' . $this->getEndedAt()->format('d-m-Y, H:i') . PHP_EOL .
+        return 'Дата начала - '. $this->getStartAt()->format('d-m-Y, H:i') . PHP_EOL .
+               'Дата конца - ' . $this->getEndAt()->format('d-m-Y, H:i') . PHP_EOL .
                'Порядок отображения - ' . $this->getDisplayOrder();
     }
 
@@ -100,6 +114,31 @@ class AdvertisementProperty
     public function removeTerminal(Terminal $terminal): static
     {
         $this->terminals->removeElement($terminal);
+
+        return $this;
+    }
+
+    public function getStartAt(): \DateTime
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt($startAt): static
+    {
+        $this->startAt = $startAt ?: new \DateTime();
+
+        return $this;
+    }
+
+    public function getEndAt(): \DateTime
+    {
+        return $this->endAt;
+
+    }
+
+    public function setEndAt($endAt): static
+    {
+        $this->endAt = $endAt ?: new \DateTime();
 
         return $this;
     }

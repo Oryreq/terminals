@@ -3,8 +3,8 @@
 namespace App\Entity\Advertisement;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Api\AdvertisementController;
 use App\Entity\Advertisement\Form\AdvertisementProperty;
 use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\Advertisement\AdvertisementRepository;
@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
@@ -21,9 +22,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext: ['groups' => 'advertisement:item']),
-        new GetCollection(normalizationContext: ['groups' => 'advertisement:item']),
+        new GetCollection(uriTemplate: '/ads'),
+        new GetCollection(
+            uriTemplate: '/adDay',
+            controller: AdvertisementController::class
+        ),
     ],
+    normalizationContext: ['groups' => 'advertisement:item'],
     paginationEnabled: false,
 )]
 class Advertisement
@@ -38,6 +43,7 @@ class Advertisement
 
 
     #[ORM\Column(length: 255)]
+    #[Groups(['advertisement:item'])]
     private ?string $advertisement = null;
 
 
@@ -46,6 +52,7 @@ class Advertisement
 
 
     #[ORM\Column]
+    #[Groups(['advertisement:item'])]
     private ?bool $canShow = null;
 
 
@@ -53,6 +60,7 @@ class Advertisement
      * @var Collection<int, AdvertisementProperty>
      */
     #[ORM\OneToMany(targetEntity: AdvertisementProperty::class, mappedBy: 'advertisement', cascade: ['persist', 'remove'])]
+    #[Groups(['advertisement:item'])]
     private Collection $properties;
 
 
@@ -140,7 +148,4 @@ class Advertisement
         }
         return $result;
     }
-
-
-
 }

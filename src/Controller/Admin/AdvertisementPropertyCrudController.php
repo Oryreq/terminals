@@ -18,10 +18,10 @@ class AdvertisementPropertyCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield DateTimeField::new('startedAt', 'Дата начала')
+        yield DateTimeField::new('startAt', 'Дата начала')
                             ->setColumns(6);
 
-        yield DateTimeField::new('endedAt', 'Дата конца')
+        yield DateTimeField::new('endAt', 'Дата конца')
                             ->setColumns(6);
 
         yield AssociationField::new('terminals', 'Терминалы');
