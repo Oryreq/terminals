@@ -86,8 +86,7 @@ class TerminalCrudController extends AbstractCrudController
         $lastStableVersion = max($stableVersions->toArray());
         $lastStableUpdate = $stableUpdates->filter(function (TerminalUpdate $update) use ($lastStableVersion) {
             return $update->getVersion() == $lastStableVersion;
-        })->get(1);
-
+        })->first();
 
         $terminals = new ArrayCollection($this->terminalRepository->findAll());
         foreach ($terminals as $terminal) {
@@ -96,6 +95,7 @@ class TerminalCrudController extends AbstractCrudController
         }
 
         $this->entityManager->flush();
+        $this->addFlash('success', 'Поставлена последняя стабильная версия для каждого терминала.');
         return $this->redirect($this->crudUrl);
     }
 
